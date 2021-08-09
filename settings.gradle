@@ -1,0 +1,4 @@
+rootProject.name = "StackView"
+include ':app'
+
+include ':stackView'
