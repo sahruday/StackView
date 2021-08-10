@@ -4,6 +4,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.sahu.stackview.R
 
 
 fun AppCompatActivity.replaceFragment(
@@ -44,6 +45,8 @@ fun Fragment.addFragment(
     sharedElements.forEach { pair ->
         transaction.addSharedElement(pair.first, pair.second)
     }
+
+    transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down,R.anim.slide_in_down, R.anim.slide_out_up)
 
     transaction.add(containerId, fragment, tag)
 

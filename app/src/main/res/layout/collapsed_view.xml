@@ -3,10 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/collapse_bg"
+    android:elevation="4dp"
+    android:layout_marginVertical="2dp"
     android:layout_height="75dp">
 
     <TextView
-        android:id="@+id/expandedText"
+        android:id="@+id/collapsedText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
@@ -14,14 +17,17 @@
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Collapsed Text" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Collapsed Text" />
 
     <ImageView
         android:id="@+id/collapse"
         android:layout_width="48dp"
         android:layout_height="48dp"
+        android:layout_marginEnd="12dp"
         android:scaleType="centerInside"
-        android:src="@android:drawable/ic_input_add"
+        android:src="@drawable/ic_down_arrow"
+        android:tooltipText="Expand this View"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

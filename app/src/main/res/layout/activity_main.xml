@@ -10,19 +10,20 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/children"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".ui.MainActivity" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:id="@+id/children"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/collapse_bg"
         android:text="ADD CHILD"
         android:textSize="14sp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/children"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
