@@ -42,7 +42,11 @@ class ChildFragment2 : StackFragment() {
 
     private fun bindExpandedView(view: View){
         if(activity is MainActivity)
-            (activity as MainActivity).setTextSetUp("Add Child View 3") { addChildFragment() }
+            (activity as MainActivity)
+                .apply {
+                    setButtonSetUp("Add Child View 3") { addChildFragment() }
+                    setButtonEnable(true)
+                }
         view.findViewById<TextView>(R.id.expandedText).text = "Expanded Text of View 2"
         view.setBackgroundColor(resources.getColor(R.color.view2_bg))
     }

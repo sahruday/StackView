@@ -29,7 +29,14 @@ class ChildFragment3 : Fragment() {
         view.findViewById<Button>(R.id.addChild).visibility = View.GONE
         view.findViewById<TextView>(R.id.expandedText).text = "Expanded Text of View 3"
         view.setBackgroundColor(resources.getColor(R.color.view3_bg))
-        if(activity is MainActivity)
-            (activity as MainActivity).setTextSetUp("This is Child View 3 Button ( No Click )") { }
+        if (activity is MainActivity) {
+            (activity as MainActivity)
+                .apply {
+                    setButtonSetUp("This is Child View 3 Button ( No Click )") { }
+                    setButtonEnable(false)
+                }
+
+        }
+
     }
 }

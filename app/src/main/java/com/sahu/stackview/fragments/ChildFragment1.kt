@@ -26,7 +26,7 @@ class ChildFragment1 : StackFragment(true) {
         return view
     }
 
-    private fun bindCollapsedView(view: View){
+    private fun bindCollapsedView(view: View) {
         view.findViewById<ImageView>(R.id.collapse).setOnClickListener {
             expandAndDetachChildren()
         }
@@ -40,9 +40,13 @@ class ChildFragment1 : StackFragment(true) {
         return view
     }
 
-    private fun bindExpandedView(view: View){
-        if(activity is MainActivity)
-            (activity as MainActivity).setTextSetUp("Add Child View 2") { addChildFragment() }
+    private fun bindExpandedView(view: View) {
+        if (activity is MainActivity)
+            (activity as MainActivity)
+                .apply {
+                    setButtonSetUp("Add Child View 2") { addChildFragment() }
+                    setButtonEnable(true)
+                }
         view.findViewById<TextView>(R.id.expandedText).text = "Expanded Text of View 1"
         view.setBackgroundColor(resources.getColor(R.color.view1_bg))
     }

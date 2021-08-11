@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sahu.ext.replaceFragment
 import com.sahu.stackview.fragments.ChildFragment1
 
-class MainActivity : AppCompatActivity(), TextSetUp {
+class MainActivity : AppCompatActivity(), ButtonSetUp {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -15,9 +15,13 @@ class MainActivity : AppCompatActivity(), TextSetUp {
             replaceFragment(R.id.container, ChildFragment1.newInstance(), "MAIN_FRAGMENT")
     }
 
-    override fun setTextSetUp(text: String, block: () -> Unit) {
+    override fun setButtonSetUp(text: String, block: () -> Unit) {
         val button: Button? = findViewById(R.id.children)
         button?.text = text
         button?.setOnClickListener { block.invoke() }
+    }
+
+    override fun setButtonEnable(isEnable: Boolean) {
+        findViewById<Button?>(R.id.children)?.isEnabled = isEnable
     }
 }

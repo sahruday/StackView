@@ -6,7 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 
@@ -47,31 +47,29 @@ abstract class StackFragment(private val isTopFragment: Boolean = false) :
     }
 
     private fun handleBackPressListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    var childFM = childFragmentManager
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            var childFM = childFragmentManager
 
-                    //when children were none pop top fragment or parents stack.
-                    if (childFM.backStackEntryCount == 0) {
-                        parentFragmentManager.popBackStack()
-                        return
-                    }
+            //when children were none pop top fragment or parents stack.
+            if (childFM.backStackEntryCount == 0) {
+                parentFragmentManager.popBackStack()
+                return@addCallback
+            }
 
-                    var fragment: Fragment = this@StackFragment
-                    //while current has child and grand child, move to child.
-                    while (childFM.backStackEntryCount != 0 && childFM.fragments[0].childFragmentManager.backStackEntryCount != 0) {
-                        fragment = childFM.fragments[0]
-                        childFM = fragment.childFragmentManager
-                    }
+            var fragment: Fragment = this@StackFragment
+            //while current has child and grand child, move to child.
+            while (childFM.backStackEntryCount != 0 && childFM.fragments[0].childFragmentManager.backStackEntryCount != 0) {
+                fragment = childFM.fragments[0]
+                childFM = fragment.childFragmentManager
+            }
 
-                    if (childFM.backStackEntryCount != 0)
-                        if (fragment is StackFragment)
-                            fragment.expandAndDetachChildren()
-                        else
-                            fragment.activity?.onBackPressed()
-                }
-            })
+            if (childFM.backStackEntryCount != 0)
+                if (fragment is StackFragment)
+                    fragment.expandAndDetachChildren()
+                else
+                    fragment.activity?.onBackPressed()
+        }
+
     }
 
     @CallSuper
@@ -92,7 +90,7 @@ abstract class StackFragment(private val isTopFragment: Boolean = false) :
                 childFragmentManager.popBackStack()
             }
 //            expandView()
-            Handler(Looper.myLooper()!!).postDelayed( { expandView()}, 500)
+            Handler(Looper.myLooper()!!).postDelayed({ expandView() }, 500)
         }
     }
 
@@ -139,7 +137,7 @@ abstract class StackFragment(private val isTopFragment: Boolean = false) :
      *
      * @param isOnCreation is used not to animate from collapse state.
      */
-    open fun expandView(isOnCreation: Boolean= false) {
+    open fun expandView(isOnCreation: Boolean = false) {
         val placeholder: ViewGroup = requireView().findViewById(R.id.placeHolder)
         placeholder.addView(attachExpandView(placeholder, isOnCreation))
         placeholder.layoutParams = ViewGroup.LayoutParams(
