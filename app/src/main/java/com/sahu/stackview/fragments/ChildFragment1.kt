@@ -9,7 +9,7 @@ import com.sahu.stackview.MainActivity
 import com.sahu.stackview.R
 import com.sahu.stackview.StackFragment
 
-class ChildFragment1 : StackFragment(true) {
+class ChildFragment1 : StackFragment() {
 
     companion object {
         fun newInstance() = ChildFragment1()

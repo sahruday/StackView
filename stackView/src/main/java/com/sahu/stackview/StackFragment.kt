@@ -10,7 +10,7 @@ import androidx.activity.addCallback
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 
-abstract class StackFragment(private val isTopFragment: Boolean = false) :
+abstract class StackFragment :
     Fragment(R.layout.stack_fragment) {
 
     var state: State = State.EXPAND
@@ -42,35 +42,56 @@ abstract class StackFragment(private val isTopFragment: Boolean = false) :
     }
 
     open fun addBackPressListener() {
-        if (isTopFragment) //Removes inner nested fragment on back press
-            handleBackPressListener()
+        onBackPressed()
     }
 
-    private fun handleBackPressListener() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            var childFM = childFragmentManager
-
-            //when children were none pop top fragment or parents stack.
-            if (childFM.backStackEntryCount == 0) {
-                parentFragmentManager.popBackStack()
-                return@addCallback
-            }
-
-            var fragment: Fragment = this@StackFragment
-            //while current has child and grand child, move to child.
-            while (childFM.backStackEntryCount != 0 && childFM.fragments[0].childFragmentManager.backStackEntryCount != 0) {
-                fragment = childFM.fragments[0]
-                childFM = fragment.childFragmentManager
-            }
-
-            if (childFM.backStackEntryCount != 0)
-                if (fragment is StackFragment)
-                    fragment.expandAndDetachChildren()
+    //Handle individually for every stack fragment.
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback {
+            if(childFragmentManager.backStackEntryCount > 0) {
+                val childFrag = childFragmentManager.fragments[0]
+                if (childFrag.childFragmentManager.backStackEntryCount > 0)
+                    childFrag.childFragmentManager.popBackStack()
                 else
-                    fragment.activity?.onBackPressed()
+                    expandAndDetachChildren()
+            }
+            else {
+                val parentFragment = (this@StackFragment).parentFragment
+                if( parentFragment is StackFragment)
+                    parentFragment.expandAndDetachChildren()
+                else
+                    parentFragmentManager.popBackStack()
+            }
         }
-
     }
+
+    //Handle from top most fragment.
+    //Need to add only for top fragment.
+//    private fun handleBackPressListener() {
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+//            var childFM = childFragmentManager
+//
+//            //when children were none pop top fragment or parents stack.
+//            if (childFM.backStackEntryCount == 0) {
+//                parentFragmentManager.popBackStack()
+//                return@addCallback
+//            }
+//
+//            var fragment: Fragment = this@StackFragment
+//            //while current has child and grand child, move to child.
+//            while (childFM.backStackEntryCount != 0 && childFM.fragments[0].childFragmentManager.backStackEntryCount != 0) {
+//                fragment = childFM.fragments[0]
+//                childFM = fragment.childFragmentManager
+//            }
+//
+//            if (childFM.backStackEntryCount != 0)
+//                if (fragment is StackFragment)
+//                    fragment.expandAndDetachChildren()
+//                else
+//                    fragment.activity?.onBackPressed()
+//        }
+//
+//    }
 
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
